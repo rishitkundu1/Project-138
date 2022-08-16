@@ -9,6 +9,7 @@ var paddle1Y;
 var  playerscore =0;
 var audio1;
 var pcscore =0;
+var canvasDiv = document.getElementById("canvasDiv");
 //ball x and y and speedx speed y and radius
 var ball = {
     x:350/2,
@@ -21,11 +22,18 @@ var ball = {
 function setup(){
   var canvas =  createCanvas(700,600);
   canvas.center();
+  canvas.parent(canvasDiv);
+
+  video = createCapture(VIDEO);
+  video.size(700, 600);
+  video.hide();
+
+  poseNet = ml5.poseNet(video, modelLoaded);
 }
 
 
 function draw(){
-
+  image(video, 0, 0, 700, 600);
  background(0); 
 
  fill("black");
@@ -160,4 +168,8 @@ function paddleInCanvas(){
   if(mouseY < 0){
     mouseY =0;
   }  
+}
+
+function modelLoaded(){
+  console.log("Model Loaded !!");
 }
