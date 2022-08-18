@@ -21,14 +21,14 @@ var ball = {
 
 function setup(){
   var canvas =  createCanvas(700,600);
-  canvas.center();
-  canvas.parent(canvasDiv);
+  canvas.parent("canvas");
 
   video = createCapture(VIDEO);
   video.size(700, 600);
   video.hide();
 
   poseNet = ml5.poseNet(video, modelLoaded);
+  poseNet.on('pose', gotPoses);
 }
 
 
@@ -172,4 +172,24 @@ function paddleInCanvas(){
 
 function modelLoaded(){
   console.log("Model Loaded !!");
+}
+var rightWristX = "";
+var rightWristY = "";
+var rightWristScore = 0;
+
+function gotPoses(results){
+  console.log(results);
+  if(results.length > 0){
+    rightWristX = results[0].pose.rightWrist.x;
+    rightWristY = results[0].pose.rightWrist.y;
+    rightWristScore = results[0].pose.keypoints[10].score;
+  }
+}
+
+function draw(){
+  if(rightWristScore > 0.2){
+    fill("#00FF00");
+    stroke("#0000FF")
+    circle(rightWristX, rightWristY, 20);
+  }
 }
